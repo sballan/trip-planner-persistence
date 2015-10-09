@@ -8,20 +8,33 @@ var models = require('../../models');
 var Day = models.Day;
 var Promise = require('bluebird');
 
-router.get('/days/:id', function(req, res, next) {
-
+//  ++-- GET ALL Days --++  //
+router.get('/', function(req, res, next) {
+	Day.find().exec()
+	.then(function(daysArray){
+		res.send(daysArray)
+	})
 })
-
+//  ++-- GET ONE Day --++  //
+router.get('/:id', function(req, res, next) {
+	Day.findById(req.params.id).exec()
+	.then(function(day) {
+		res.send(day)
+	})
+})
+//  ++-- POST NEW Day --++  //
 router.post('/', function(req, res, next) {
-	console.log("NEW DAY POSTED HURRAY THIS IS TOO HARD")
 	Day.create({number: 1337})
-	//db query?
-	//or get data from index.js's call to db
-	//and create a new Day!
-
 	res.send(200)
 })
 
+//  ++-- DELETE Day --++  //
+router.delete('/:id', function(req, res, next) {
+	Day.findByIdAndRemove(req.params.id).exec()
+	.then(function(day) {
+		res.send(200, "We deleted it");
+	})
+})
 
 
 module.exports = router;
