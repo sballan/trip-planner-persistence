@@ -14,6 +14,7 @@ router.get('/', function(req, res, next) {
 	.then(function(daysArray){
 		res.send(daysArray)
 	})
+
 })
 //  ++-- GET ONE Day --++  //
 router.get('/:id', function(req, res, next) {
@@ -24,10 +25,16 @@ router.get('/:id', function(req, res, next) {
 })
 //  ++-- POST NEW Day --++  //
 router.post('/:num', function(req, res, next) {//:num
-	Day.create({number: req.params.num})
-	console.log("ROUTER POST data lets see whats in here")
-	console.dir(req.body);
-	res.send(200)
+	//Days.find
+		//now we got the lenggth right herrre
+
+
+				//Dat.create
+	//
+	Day.create({number: 444}, function(err, dayInfo) {
+		console.log("Day info is: " + dayInfo);
+	})
+	res.send(200);
 })
 
 //  ++-- DELETE Day --++  //
