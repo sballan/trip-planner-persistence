@@ -23,8 +23,10 @@ router.get('/:id', function(req, res, next) {
 	})
 })
 //  ++-- POST NEW Day --++  //
-router.post('/', function(req, res, next) {
-	Day.create({number: 1337})
+router.post('/:num', function(req, res, next) {//:num
+	Day.create({number: req.params.num})
+	console.log("ROUTER POST data lets see whats in here")
+	console.dir(req.body);
 	res.send(200)
 })
 

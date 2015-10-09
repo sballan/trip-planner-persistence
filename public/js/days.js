@@ -81,7 +81,19 @@ var daysModule = (function(){
     return '<div class="itinerary-item><span class="title>' + attraction.name + '</span><button data-id="' + attraction._id + '" data-type="' + attraction.type + '" class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
   }
 
+  function setupStart() {
+    $.get('/api/days', function (data) {
+      console.log('GET response data', data)
+      if(!data.length) {
+        $.post('/api/days/1', function (data) {})
+        .fail( function (err) { console.error('err', err) });
+      }
+    })
+    .fail( function (err){ console.error('err', err) });
+  }
+
   $(document).ready(function(){
+    setupStart()
     switchDay(0);
     $('.day-buttons').on('click', '.new-day-btn', addDay);
     $('.day-buttons').on('click', 'button:not(.new-day-btn)', function() {
