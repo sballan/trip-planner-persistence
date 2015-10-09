@@ -25,12 +25,6 @@ router.get('/:id', function(req, res, next) {
 })
 //  ++-- POST NEW Day --++  //
 router.post('/:num', function(req, res, next) {//:num
-	//Days.find
-		//now we got the lenggth right herrre
-
-
-				//Dat.create
-	//
 	Day.create({number: 444}, function(err, dayInfo) {
 		console.log("Day info is: " + dayInfo);
 	})

@@ -18,26 +18,12 @@ var daysModule = (function(){
   }
 
   function switchDay (index) {
-    var dayNum = index + 1;
     var $title = $('#day-title');
     if (index >= days.length) index = days.length - 1;
     $title.children('span').remove();
     $title.prepend('<span>Day ' + (index + 1) + '</span>');
-
-    $.get('/api/days', function (data) {
-      if(!data.length) {
-        $.post('/api/days/1', function (data) {
-          console.log("The data in our callback is: ")
-          console.dir(data);
-        })
-        .fail( function (err) { console.error('err', err) });
-      }
-    })
-    .fail( function (err){ console.error('err', err) });
-
-
-
-
+    console.log("I Hope Days Have stuff in them");
+    console.dir(days)
     currentDay = days[index];
     renderDay();
     renderDayButtons();
@@ -78,7 +64,9 @@ var daysModule = (function(){
 
   function renderDay(day) {
     mapModule.eraseMarkers();
+    console.log("Lets have a look inside this dirty dirty day");
     day = day || currentDay;
+    console.dir(currentDay)
     Object.keys(day).forEach(function(type){
       var $list = $('#itinerary ul[data-type="' + type + '"]');
       $list.empty();
@@ -94,26 +82,21 @@ var daysModule = (function(){
   }
 
   function setupStart() {
-    $.get('/api/days', function (data) {//
-      if(!data.length) {//
-        $.post('/api/days/1', function (data) {})
-        .fail( function (err) { console.error('err', err) });
-      }
-    })
-    .fail( function (err){ console.error('err', err) });//
+    if(!days.length) {
+      $.post('/api/days/1', function (data) {})
+      .fail( function (err) { console.error('err', err) });
+    }
+    currentDay = days[0]
   }
 
   $(document).ready(function(){
-    //.get, pull in db. populate the daysarray[] thats in the this file
     $.get('/api/days', function(data){
       days = days.concat(data);
-      currentDay = days[0]
-
+      console.log("Doc Ready")
+      console.dir(days);
     })
-
-
-    //if arraylength is 0, then post. otherwise, continue with switchDay
     setupStart()
+
     switchDay(0);
     $('.day-buttons').on('click', '.new-day-btn', addDay);
     $('.day-buttons').on('click', 'button:not(.new-day-btn)', function() {
