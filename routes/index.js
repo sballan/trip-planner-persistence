@@ -6,8 +6,10 @@ var Restaurant = models.Restaurant;
 var Activity = models.Activity;
 var Promise = require('bluebird');
 var daysAPI = require('./api/days');
+var attractionsAPI = require('./api/attractions');
 
 router.use('/api/days', daysAPI);
+router.use('/api/attractions', attractionsAPI);
 
 router.get('/', function(req, res) {
   Promise.all([

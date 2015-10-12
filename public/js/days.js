@@ -13,6 +13,10 @@ var daysModule = (function(){
       restaurants: [],
       activities: []
     });
+
+    $.post('/api/days/' + days.length + 1, function (data) {})
+      .fail( function (err) { console.error('err', err) });
+
     renderDayButtons();
     switchDay(days.length - 1);
   }
@@ -22,8 +26,7 @@ var daysModule = (function(){
     if (index >= days.length) index = days.length - 1;
     $title.children('span').remove();
     $title.prepend('<span>Day ' + (index + 1) + '</span>');
-    console.log("I Hope Days Have stuff in them");
-    console.dir(days)
+
     currentDay = days[index];
     renderDay();
     renderDayButtons();
@@ -51,9 +54,18 @@ var daysModule = (function(){
 
   exports.addAttraction = function(attraction) {
     if (currentDay[attraction.type].indexOf(attraction) !== -1) return;
+
     currentDay[attraction.type].push(attraction);
+
+    // $.
+    $.post('/api/attractions/' + currentDay, function (data) {
+      req.body.thepropID = '12345!!!!!';
+      console.log(data)
+    })
+    .fail( function (err) { console.error('err', err) });
+
     renderDay(currentDay);
-  };
+    };
 
   exports.removeAttraction = function (attraction) {
     var index = currentDay[attraction.type].indexOf(attraction);
@@ -64,16 +76,20 @@ var daysModule = (function(){
 
   function renderDay(day) {
     mapModule.eraseMarkers();
-    console.log("Lets have a look inside this dirty dirty day");
+
     day = day || currentDay;
-    console.dir(currentDay)
+    console.log("After Assignment")
+    console.dir(day);
+
     Object.keys(day).forEach(function(type){
       var $list = $('#itinerary ul[data-type="' + type + '"]');
       $list.empty();
-      day[type].forEach(function(attraction){
-        $list.append(itineraryHTML(attraction));
-        mapModule.drawAttraction(attraction);
-      });
+      if(Array.isArray(day[type])) {
+        day[type].forEach(function(attraction){
+          $list.append(itineraryHTML(attraction));
+          mapModule.drawAttraction(attraction);
+        });
+      }
     });
   }
 
@@ -94,10 +110,10 @@ var daysModule = (function(){
       days = days.concat(data);
       console.log("Doc Ready")
       console.dir(days);
+      setupStart()
+      switchDay(0);
     })
-    setupStart()
 
-    switchDay(0);
     $('.day-buttons').on('click', '.new-day-btn', addDay);
     $('.day-buttons').on('click', 'button:not(.new-day-btn)', function() {
       switchDay($(this).index());
